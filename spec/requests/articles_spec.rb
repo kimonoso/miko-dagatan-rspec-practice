@@ -7,7 +7,7 @@ RSpec.describe 'Articles', type: :request do
 
   describe 'GET /articles/:id' do
     context 'with existing article' do
-      before { get "articles/#{article.id}" }
+      before { get "/articles/#{@article.id}" }
 
       it 'handles existing article' do
         expect(response.status).to eq 200
