@@ -16,6 +16,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'sprockets', '~> 4.0.beta'
 gem 'parser'
 gem 'devise'
+gem 'jquery-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
 
