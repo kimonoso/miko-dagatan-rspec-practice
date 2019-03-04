@@ -26,20 +26,15 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    unless user_signed_in?
-      flash[:alert] = 'You need to sign in or sign up before continuing'
-    end
     unless @article.user == current_user
-      flash[:alert] = 'You can only edit your own article'
+      flash[:alert] = 'You can only edit your own article.'
       redirect_to root_path
     end
   end
 
+
   def update
-    unless @article.user == current_user
-      flash[:alert] = 'You can only edit your own article'
-      redirect_to root_path
-    else
+    if @article.user == current_user
       if @article.update(article_params)
         flash[:success] = 'Article has been updated'
         redirect_to @article
@@ -47,12 +42,20 @@ class ArticlesController < ApplicationController
         flash.now[:danger] = 'Article has not been updated'
         render :edit
       end
+    else
+      flash[:alert] = 'You can only edit your own article.'
+      redirect_to root_path
     end
   end
 
   def destroy
-    if @article.destroy
-      flash[:success] = 'Article has been deleted'
+    if @article.user == current_user
+      if @article.destroy
+        flash[:success] = 'Article has been deleted'
+        redirect_to articles_path
+      end
+    else
+      flash[:alert] = 'You can only delete your own article'
       redirect_to articles_path
     end
   end

@@ -9,29 +9,78 @@ RSpec.describe 'Articles', type: :request do
                                user: @john)
   end
 
-  describe 'Get /articles/:id/edit' do
+  describe 'GET /articles/:id/edit - ' do
     context 'with non-signed in user' do
       before { get "/articles/#{@article.id}/edit"}
 
       it 'redirects to the sign in page' do
         expect(response.status).to eq 302
-        flash_message = 'You need to sign in or sign up before continuing'
+        flash_message = 'You need to sign in or sign up before continuing.'
         expect(flash[:alert]).to eq flash_message
       end
     end
 
     context 'with signed in user but non-owner' do
-      login_as(@fred)
-      before {get "/articles/#{@article.id}/edit"}
+
+      before do
+        login_as(@fred)
+        get "/articles/#{@article.id}/edit"
+      end
 
       it 'redirects to the home page' do
         expect(response.status).to eq 302
-        flash_message = 'You can only edit your own article'
+        flash_message = 'You can only edit your own article.'
         expect(flash[:alert]).to eq flash_message
       end
     end
 
+    context 'with signed in user as owner' do
+      before do
+        login_as(@john)
+        get "/articles/#{@article.id}/edit"
+      end
 
+      it 'can be edited successfully' do
+        expect(response.status).to eq 200
+      end
+    end
+  end
+
+  describe 'DELETE /articles/:id/destroy - ' do
+    context 'with non-signed in user' do
+      before { delete "/articles/#{@article.id}"}
+
+      it 'redirects to the sign in page' do
+        expect(response.status).to eq 302
+        flash_message = 'You need to sign in or sign up before continuing.'
+        expect(flash[:alert]).to eq flash_message
+      end
+    end
+
+    context 'with signed in user but non-owner' do
+
+      before do
+        login_as(@fred)
+        delete "/articles/#{@article.id}"
+      end
+
+
+      it 'redirects to the home page' do
+        expect(response.status).to eq 302
+        flash_message = 'You can only delete your own article'
+        expect(flash[:alert]).to eq flash_message
+      end
+    end
+
+    context 'with signed in owner' do
+      before do
+        delete "/articles/#{@article.id}"
+      end
+
+      it 'successfully deletes article' do
+        expect(response.status).to eq 200
+      end
+    end
   end
 
   describe 'GET /articles/:id' do
