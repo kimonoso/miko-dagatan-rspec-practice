@@ -19,7 +19,7 @@ RSpec.feature 'Adding comments to Articles' do
 
     click_button 'Add Comment'
 
-    expect(page).to have_content('Comment has been added')
+    expect(page).to have_content('Comment has been created')
     expect(page).to have_content('An amazing article')
     expect(current_path).to eq(article_path(@article.id))
   end
