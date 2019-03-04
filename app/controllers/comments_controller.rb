@@ -4,6 +4,7 @@ class CommentsController < ApplicationController
   def create
     unless current_user
       flash[:alert] = 'Please sign in or sign up first'
+      redirect_to new_user_session_path
     else
       @comment = @article.comments.build(comment_params)
       @comment.user = current_user

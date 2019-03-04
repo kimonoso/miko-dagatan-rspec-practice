@@ -23,4 +23,5 @@ RSpec.feature 'Adding comments to Articles' do
     expect(page).to have_content('An amazing article')
     expect(current_path).to eq(article_path(@article.id))
   end
+  
 end
